@@ -34,7 +34,7 @@ namespace MemeBook.Services
 
         public List<Post> GetPostByCircle(Circles circles)
         {
-            return _posts.Find(m => m.Circles == circles).ToList();
+            return _posts.Find(m => m.Circles.Circle_ID == circles.Circle_ID).ToList();
         }
         public void CreatePost(string id, string content, Circles circle)
         {

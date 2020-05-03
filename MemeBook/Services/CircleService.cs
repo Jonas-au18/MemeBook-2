@@ -33,9 +33,19 @@ namespace MemeBook.Services
             return _Circle.Find(m => m.Circle_ID == id).FirstOrDefault();
         }
 
-        public List<Circles> FindByUser(User user)
+        public List<Circles> FindByUser(User _user)
         {
-            return _Circle.Find(m => m.users.Contains(user)).ToList();
+            List<Circles> myCircles = new List<Circles>();
+            var C = Get();
+            foreach (var i in C)
+            {
+                if (i.users.Find(x => x.User_ID == _user.User_ID) != null)
+                {
+                    myCircles.Add(i);
+                }
+            }
+
+            return myCircles;
         }
 
         public string CreateCircle(User user)
