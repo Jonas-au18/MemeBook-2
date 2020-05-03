@@ -38,12 +38,9 @@ namespace MemeBook.Services
         {
             var user = _users.Find(m => m.User_ID == id).FirstOrDefault();
 
-            foreach (var VARIABLE in user.Post_ID)
-            {
-                Console.WriteLine(VARIABLE);
-            }
-            
-            return user.Post_ID;
+            List<string> ids = new List<string>();
+            ids = user.Post_ID;
+            return ids;
         }
 
         public void CreateUser(User user)

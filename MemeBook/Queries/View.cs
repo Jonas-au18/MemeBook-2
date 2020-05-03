@@ -42,11 +42,9 @@ namespace MemeBook.Queries
         {
             List<Post> myPosts = new List<Post>();
             var ids = _users.GetPostById(user.User_ID);
-            Console.WriteLine(ids.Count);
             foreach (var i in ids)
             {
                 myPosts.Add(_posts.GetPostById(i));
-                Console.WriteLine("Adding post" + myPosts.Last());
             }
             return myPosts;
         }

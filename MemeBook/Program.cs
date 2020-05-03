@@ -39,7 +39,7 @@ namespace MemeBook
                 Console.WriteLine("Now logged in");
             }
 
-            bool fuckYouuuuu = false;
+            bool done = false;
 
             do
             {
@@ -50,19 +50,21 @@ namespace MemeBook
                     case 'w':
                     {
                         var myPost = _view.Wall(_user);
-                        Console.WriteLine(myPost.Count);
-                        Console.WriteLine(_user.User_ID);
-                        Console.WriteLine("I Entered an evul loop");
+
                         foreach (var i in myPost)
                         {
-                            Console.Write("Derpy mc Derp \n");
-                            Console.WriteLine(i.Content.ToString());
+                            Console.WriteLine(i.Content);
                         }
-                        Console.Write("Breaking a habit");
+
                         break;
                     }
                     case 'f':
                     {
+                        var myFeed = _view.Feed(_user);
+                        foreach (var i in myFeed)
+                        {
+                            Console.WriteLine(i.Content);   
+                        }
                         break;
                     }
                     case 'u':
@@ -70,7 +72,7 @@ namespace MemeBook
                         break;
                     }
                 }
-            } while (!fuckYouuuuu);
+            } while (!done);
         }
     }
 }

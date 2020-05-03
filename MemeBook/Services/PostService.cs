@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using MemeBook.Models;
 using MongoDB.Driver;
@@ -28,9 +29,7 @@ namespace MemeBook.Services
 
         public Post GetPostById(string id)
         {
-            var hej = _posts.Find(m => m.Post_ID == id).FirstOrDefault();
-            Console.WriteLine(hej.Content);
-            return hej;
+            return _posts.Find(m => m.Post_ID == id).FirstOrDefault();;
         }
 
         public List<Post> GetPostByCircle(Circles circles)
@@ -45,12 +44,10 @@ namespace MemeBook.Services
                 Content = content,
                 Owner_ID = id
             };
-
-            Console.WriteLine(post.Content);
+            _posts.InsertOne(post);
             var user = _user.GetById(id);
             user.Post_ID.Add(post.Post_ID);
             _user.UpdateUser(user);
-            _posts.InsertOne(post);
         }
 
         public void DeletePost(string id)
