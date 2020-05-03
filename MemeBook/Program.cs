@@ -50,21 +50,23 @@ namespace MemeBook
                     case 'w':
                     {
                         var myPost = _view.Wall(_user);
-
+                        Console.WriteLine("\n");
                         foreach (var i in myPost)
                         {
                             Console.WriteLine(i.Content);
                         }
-
+                        Console.WriteLine("\n");
                         break;
                     }
                     case 'f':
                     {
                         var myFeed = _view.Feed(_user);
+                        Console.WriteLine("\n");
                         foreach (var i in myFeed)
                         {
                             Console.WriteLine(i.Content);   
                         }
+                        Console.WriteLine("\n");
                         break;
                     }
                     case 'u':
