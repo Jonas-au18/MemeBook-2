@@ -126,7 +126,7 @@ namespace MemeBook
                 var p = new Post()
                 {
                     Owner_ID = myUsers[1].User_ID,
-                    Circles = myCircles[0],
+                    Circle = myCircles[0].Circle_ID,
                     Content = "#kimjungundead"
                 };
                 myPost.Add(p);

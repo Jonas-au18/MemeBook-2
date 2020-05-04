@@ -22,3 +22,4 @@ namespace MemeBook.Models
         [BsonElement("Created")] public string date = DateTime.Now.ToShortDateString();
     }
 }
+

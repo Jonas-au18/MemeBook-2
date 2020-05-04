@@ -25,7 +25,7 @@ namespace MemeBook.Services
 
         public string GetByName(string name)
         {
-            var user = _users.Find(m => m.Username == name).FirstOrDefault();
+            var user = _users.Find(m => m.Fullname == name).FirstOrDefault();
             return user.User_ID;
         }
 
@@ -41,6 +41,16 @@ namespace MemeBook.Services
             List<string> ids = new List<string>();
             ids = user.Post_ID;
             return ids;
+        }
+
+        public List<string> SearchByName(string name)
+        {   
+            List<string> names = new List<string>();
+            var users = _users.Find(m => true).ToList();
+            foreach (var i in users)
+            {
+                
+            }
         }
 
         public void CreateUser(User user)
