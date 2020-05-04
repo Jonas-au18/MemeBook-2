@@ -12,5 +12,6 @@ namespace MemeBook.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Circle_ID { get; set; }
         [BsonElement("Members")] public List<User> users { get; set; } = new List<User>();
+        [BsonElement("name")] public string name { get; set; } = "";
     }
 }

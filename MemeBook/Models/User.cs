@@ -13,11 +13,12 @@ namespace MemeBook.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string User_ID { get; set; }
         [NotNull]
-        [BsonElement("Username")] public string Username { get; set; }
         [BsonElement("Fullname")]public string Fullname { get; set; }
-        [BsonElement("Age")]public int Age { get; set; }
+        [BsonElement("Age")] public int Age { get; set; } = 0;
         [BsonElement("Post_ID")]public List<string> Post_ID { get; set; } = new List<string>();
         [BsonElement("Logged_in")] public bool Logged_in { get; set; } = false;
         [BsonElement("Blocked")]public List<string> Blocked { get; set; } = new List<string>();
+        [BsonElement("Circle")]public Circles PersonalCircle { get; set; }
+        [BsonElement("Followed")]public List<string> Following { get; set;} = new List<string>();
     }
 }

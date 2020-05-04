@@ -11,10 +11,11 @@ namespace MemeBook.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Comment_ID { get; set; }
-        public string Owner_ID { get; set; }
-        [BsonElement("Content")] public string Content { get; set; }
+
+        public string Owner_ID { get; set; } = "";
+        [BsonElement("Content")] public string Content { get; set; } ="";
         [BsonElement("Likes")] public int Likes { get; set; } = 0;
         [BsonElement("Dislike")] public int Dislikes { get; set; } = 0;
-        private DateTime myDate = DateTime.Now;
+        [BsonElement("Created")] public string date = DateTime.Now.ToShortDateString();
     }
 }

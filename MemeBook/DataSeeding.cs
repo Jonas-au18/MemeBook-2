@@ -27,36 +27,30 @@ namespace MemeBook
                 var Users = new List<User>();
                 var u = new User()
                 {
-                    Username = "Hans",
                     Fullname = "Hans Petersen",
                     Age = 42
                 };
                 Users.Add(u);
                 u = new User()
                 {
-                    Username = "Viggo",
                     Fullname = "Viggo bjerg af simba",
                     Age = 22
                 };
                 Users.Add(u);
                 u = new User()
                 {
-                    Username = "Jonas",
                     Fullname = "Jonas Nielsen",
                     Age = 31
                 };
                 Users.Add(u);
                 u = new User()
                 {
- 
-                    Username = "Kappa",
                     Fullname = "Kappa the king",
                     Age = 9001
                 };
                 Users.Add(u);
                 u = new User()
                 {
-                    Username = "MemeMaster",
                     Fullname = "Martin Roland",
                     Age = 20
                 };
