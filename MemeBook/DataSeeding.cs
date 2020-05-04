@@ -54,6 +54,7 @@ namespace MemeBook
                     Fullname = "Martin Roland",
                     Age = 20
                 };
+                Users.Add(u);
                 foreach (var i in Users)
                 {
                     _user.CreateUser(i);
@@ -69,22 +70,48 @@ namespace MemeBook
             if (m.Count == 0)
             {
                 var circles = new List<Circles>();
-                var c = new Circles();
-                string id = _circle.CreateCircle(myUsers[1]);
-                _circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[1].User_ID),id);
-                _circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[3].User_ID),id);
+                var c = new Circles()
+                {
+                    users = {myUsers[1], myUsers[3]}
+                };
+                circles.Add(c);
+                c = new Circles()
+                {
+                    users = { myUsers[0], myUsers[1], myUsers[1] }
+                };
+                circles.Add(c);
+                c = new Circles()
+                {
+                    users = { myUsers[3]}
+                };
+                circles.Add(c);
+                c = new Circles()
+                {
+                    users = { myUsers[1], myUsers[2], myUsers[3], myUsers[4] }
+                };
+                circles.Add(c);
 
-                id = _circle.CreateCircle(myUsers[3]);
-                _circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[0].User_ID),id);
-                _circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[1].User_ID),id);
-                _circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[2].User_ID),id);
+                foreach (var i in circles)
+                {
+                    _circle.CreateCircle(myUsers[1]);
+                }
 
-                id = _circle.CreateCircle(myUsers[3]);
 
-                id = _circle.CreateCircle(myUsers[0]);
-                _circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[1].User_ID),id);
-                _circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[2].User_ID),id);
-                _circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[3].User_ID),id);
+                //string id = _circle.CreateCircle(myUsers[1]);
+                //_circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[1].User_ID),id);
+                //_circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[3].User_ID),id);
+
+                //id = _circle.CreateCircle(myUsers[3]);
+                //_circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[0].User_ID),id);
+                //_circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[1].User_ID),id);
+                //_circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[2].User_ID),id);
+
+                //id = _circle.CreateCircle(myUsers[3]);
+
+                //id = _circle.CreateCircle(myUsers[0]);
+                //_circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[1].User_ID),id);
+                //_circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[2].User_ID),id);
+                //_circle.AddToCircle(myUsers.Find(m => m.User_ID == myUsers[3].User_ID),id);
             }
         }
 
