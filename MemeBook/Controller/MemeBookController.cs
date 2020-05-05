@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using MemeBook.Models;
 using MemeBook.Queries;
 using MemeBook.Services;
+using MongoDB.Bson;
 
 namespace MemeBook.Controller
 {
     public class MemeBookController
     {
-        private User _user;
+        private User _user = new User();
         private string refId;
         private UserService _uService;
         private PostService _pService;
@@ -60,7 +61,7 @@ namespace MemeBook.Controller
 
         public void ShowFriends()
         {
-            if (_user.Following != null)
+            if (_user != null && _user.Following != null)
             {
                 foreach (var i in _user.Following)
                 {
@@ -97,11 +98,21 @@ namespace MemeBook.Controller
 
                 } while (!done);
             }
+            Console.WriteLine("Your're forever alone");
         }
 
         public void ShowGroups()
         {
-
+            if (_user != null)
+            {
+                var grps = _cService.FindByUser(_user.User_ID);
+                foreach (var i in grps)
+                {
+                    boxLine();
+                    Console.WriteLine("Name: " + i.name + " Members: " + i.users.Count + " Public: " + !i.isPrivate);
+                    boxLine();
+                }
+            }
         }
 
         public void SearchUser()
@@ -121,7 +132,7 @@ namespace MemeBook.Controller
             do
             {
                 boxLine();
-                Console.WriteLine("|| 1:Show wall || 2:Show User details || 3:Go back ||");
+                Console.WriteLine("|| 1:Show wall || 2:Show User details || 3:Follow user || 4:Block user || 5:Go back ||");
                 string key = Console.ReadLine();
                 if (string.IsNullOrEmpty(key)) continue;
                 switch (key[0])
@@ -130,17 +141,28 @@ namespace MemeBook.Controller
                     {   boxLine();
                         Console.WriteLine("Enter the number of the person you wanna watch");
                         int index = Convert.ToInt32(Console.ReadLine()) - 1;
-                        var view = _view.Wall(_uService.GetById(names[index]).PersonalCircle);
-                        Console.WriteLine("\n");
-                        foreach (var i in view)
+                        if (!_uService.GetById(names[index]).Blocked.Contains(_user.User_ID))
+                        {
+                            var view = _view.Wall(_uService.GetById(names[index]).PersonalCircle);
+                            Console.WriteLine("\n");
+                            foreach (var i in view)
+                            {
+                                boxLine();
+                                Console.WriteLine(
+                                    "Posted: " + i.date + " by: " + _uService.GetById(i.Owner_ID).Fullname);
+                                boxLine();
+                                Console.WriteLine(i.Content);
+                                boxLine();
+                                Console.WriteLine("\n");
+                            }
+                        }
+                        else
                         {
                             boxLine();
-                            Console.WriteLine("Posted: " + i.date + " by: " + _uService.GetById(i.Owner_ID).Fullname);
+                            Console.WriteLine("This user have blocked you");
                             boxLine();
-                            Console.WriteLine(i.Content);
-                            boxLine();
-                            Console.WriteLine("\n");
                         }
+
                         break;
                     }
                     case '2':
@@ -148,15 +170,40 @@ namespace MemeBook.Controller
                         boxLine();
                         Console.WriteLine("Enter the number of the person you wanna watch");
                         int index = Convert.ToInt32(Console.ReadLine()) - 1;
-                        var person = _uService.GetById(names[index]);
-                        boxLine();
-                        Console.WriteLine("Name: " +person.Fullname);
-                        Console.WriteLine("Age: " + person.Age);
-                        Console.WriteLine("Gender: " + person.gender);
-                        Console.WriteLine("Loggedin: " + person.Logged_in);
+                        if (!_uService.GetById(names[index]).Blocked.Contains(_user.User_ID))
+                        {
+                            var person = _uService.GetById(names[index]);
+                            boxLine();
+                            Console.WriteLine("Name: " + person.Fullname);
+                            Console.WriteLine("Age: " + person.Age);
+                            Console.WriteLine("Gender: " + person.gender);
+                            Console.WriteLine("Loggedin: " + person.Logged_in);
+                        }
+
                         break;
                     }
                     case '3':
+                    {
+                        boxLine();
+                        Console.WriteLine("Enter the number of the person you want to follow");
+                        boxLine();
+                        int index = Convert.ToInt32(Console.ReadLine());
+                        if (!_uService.GetById(names[index]).Blocked.Contains(_user.User_ID))
+                        {
+                            _uService.followUser(_user,names[index]);
+                        }
+                        break;
+                    }
+                    case '4':
+                    {
+                        boxLine();
+                        Console.WriteLine("Enter the number of the person you want to block");
+                        boxLine();
+                        int index = Convert.ToInt32(Console.ReadLine());
+                        _uService.blockUser(_user,names[index]);
+                        break;
+                    }
+                    case '5':
                     {
                         done = true;
                         break;
@@ -168,7 +215,26 @@ namespace MemeBook.Controller
 
         public void SearchGroup()
         {
-
+            boxLine();
+            Console.WriteLine("Enter the group name you wanna search for");
+            boxLine();
+            string name = Console.ReadLine();
+            var names = _cService.SearchByName(name);
+            foreach (var i in names)
+            {
+                if (!i.isPrivate ||i.AllowedUser.Contains(_user.User_ID))
+                {
+                    boxLine();
+                    Console.WriteLine("Name: " + i.name + " Members: " + i.users.Count);
+                    boxLine();
+                }
+                else
+                {
+                    boxLine();
+                    Console.WriteLine("No such group exist");
+                    boxLine();
+                }
+            }
         }
 
         public void wall()
@@ -196,16 +262,16 @@ namespace MemeBook.Controller
 
         public void feed()
         {
-            if (_user != null && _user.Logged_in)
+            if (_user != null)
             {
                 var myFeed = _view.Feed(_user);
                 Console.WriteLine("\n");
-                foreach (var i in myFeed)
+                for (int i = myFeed.Count - 1; i > 0; i--)
                 {
                     boxLine();
-                    Console.WriteLine("Posted: " + i.date + " by: " + _uService.GetById(i.Owner_ID).Fullname);
+                    Console.WriteLine("Posted: " + myFeed[i].date + " by: " + _uService.GetById(myFeed[i].Owner_ID).Fullname);
                     boxLine();
-                    Console.WriteLine(i.Content);
+                    Console.WriteLine(myFeed[i].Content);
                     boxLine();
                     Console.WriteLine("\n");
                 }
@@ -219,6 +285,67 @@ namespace MemeBook.Controller
         {
             _user.Logged_in = false;
             _uService.UpdateUser(_user);
+            _user = null;
+        }
+
+        public void CreatePost(Circles circle)
+        {
+            boxLine();
+            Console.WriteLine("Enter the data you want to post");
+            boxLine();
+            string content = Console.ReadLine();
+            boxLine();
+            Console.WriteLine("Is the post public or private [Y/N]");
+            bool isPublic;
+            if (Console.ReadLine() == "y")
+            {
+                isPublic = true;
+            }
+            else
+            {
+                isPublic = false;
+            }
+
+            Post myPost = new Post()
+            {
+                Owner_ID = _user.User_ID,
+                Content = content,
+                isPublic = isPublic,
+                Circle_ID = circle.Circle_ID
+            };
+            _pService.CreatePost(myPost);
+        }
+
+        public void DeletePost(Circles circle)
+        {
+            boxLine();
+            Console.WriteLine("Enter post you want to delete");
+            boxLine();
+            var posts = _pService.GetPostByCircle(circle);
+            int index = Convert.ToInt32(Console.ReadLine());
+            _pService.DeletePost(posts[index].Post_ID);
+        }
+
+        public void CreateComment(Post post)
+        {
+            boxLine();
+            Console.WriteLine("Enter the comment you want to add");
+            boxLine();
+            string comment = Console.ReadLine();
+            Comment newcomment = new Comment();
+            newcomment.Owner_ID = _user.User_ID;
+            newcomment.Content = comment;
+            post.Comments.Add(newcomment);
+            _pService.CreateComment(post.Post_ID,newcomment);
+        }
+
+        public void DeleteComment(int index, Post post)
+        {
+            boxLine();
+            Console.WriteLine("Enter the number comment you want to remove");
+            boxLine();
+            int ind = Convert.ToInt32(Console.ReadLine());
+            _pService.DeleteComment(ind,post);
         }
     }
 }

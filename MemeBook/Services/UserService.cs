@@ -62,5 +62,17 @@ namespace MemeBook.Services
         {
             _users.ReplaceOne(m => m.User_ID == user.User_ID, user);
         }
+
+        public void followUser(User user, string toFollow)
+        {
+            user.Following.Add(toFollow);
+            _users.ReplaceOne(m => m.User_ID == user.User_ID, user);
+        }
+
+        public void blockUser(User user, string toBlock)
+        {
+            user.Blocked.Add(toBlock);
+            _users.ReplaceOne(m => m.User_ID == user.User_ID, user);
+        }
     }
 }

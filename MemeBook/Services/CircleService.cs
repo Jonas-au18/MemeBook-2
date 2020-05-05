@@ -46,19 +46,15 @@ namespace MemeBook.Services
             return myCircles;
         }
 
-        public string CreateCircle(string user,string name)
+        public List<Circles> SearchByName(string name)
         {
-            Circles myCircles = new Circles()
-            {
-                users = new List<string>
-                {
-                    user
-                },
-                name = name
-            };
-            _Circle.InsertOne(myCircles);
-            var id = _Circle.Find(m => m.Circle_ID == myCircles.Circle_ID).FirstOrDefault();
-            return id.Circle_ID;
+            var circle = _Circle.Find(m => m.name.Contains(name)).ToList();
+            return circle;
+        }
+
+        public void CreateCircle(Circles Circle)
+        {
+            _Circle.InsertOne(Circle);
         }
 
         public void DeleteCircle(string id)

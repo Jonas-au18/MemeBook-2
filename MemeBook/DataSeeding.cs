@@ -83,9 +83,7 @@ namespace MemeBook
                 foreach (var i in Users)
                 {
                     _user.CreateUser(i);
-                    _circle.CreateCircle(i.User_ID,"");
-                    var id = _circle.FindByUser(i.User_ID);
-                    i.PersonalCircle = id[0];
+                    _circle.CreateCircle(i.PersonalCircle);
                     _user.UpdateUser(i);
                 }
             }
@@ -179,15 +177,18 @@ namespace MemeBook
                     name = "Secret order"
                 };
                 circles.Add(c);
+                c = new Circles()
+                {
+                    users = new List<string>(),
+                    name = "Private chat",
+                    AllowedUser = new List<string>() {myUsers[2].User_ID, myUsers[4].User_ID},
+                    isPrivate = true
+                };
+                circles.Add(c);
 
                 foreach (var i in circles)
                 {
-                    var id = _circle.CreateCircle(myUsers[0].User_ID, i.name);
-                    var user = i.users;
-                    foreach (var j in user)
-                    {
-                        _circle.AddToCircle(j,id);
-                    }
+                    _circle.CreateCircle(i);
                 }
 
             }
@@ -282,7 +283,7 @@ namespace MemeBook
                 myPost.Add(p);
                 foreach (var i in myPost)
                 {
-                    _post.CreatePost(i.Owner_ID,i.Content,i.Circle_ID);
+                    _post.CreatePost(i);
                 }
 
             }

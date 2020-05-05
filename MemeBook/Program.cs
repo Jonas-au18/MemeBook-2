@@ -28,6 +28,16 @@ namespace MemeBook
                 if (string.IsNullOrEmpty(key)) continue;
                 switch (key[0])
                 {
+                    case 'e': // search group
+                    {
+                        _control.ShowFriends();
+                        break;
+                    }
+                    case 'g': // search group
+                    {
+                        _control.SearchGroup();
+                        break;
+                    }
                     case 'w':
                     {
                         _control.wall();
@@ -52,8 +62,12 @@ namespace MemeBook
                     case 'o':
                     {
                         _control.logout();
+                        done = true;
                         break;
                     }
+                    case 'h':
+                        _control.ShowGroups();
+                        break;
                 }
             } while (!done);
         }
