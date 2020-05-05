@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -15,7 +16,7 @@ namespace MemeBook.Models
         [BsonElement("Owner")] public string Owner_ID { get; set; } = "";
         [BsonElement("Content")] public string Content { get; set; } = "";
         [BsonElement("Circle")]public string Circle_ID { get; set; }
-        [BsonElement("Comments")]public List<Comment> Comments { get; set; } = new List<Comment>();
+        [BsonElement("Comments")] public List<Comment> Comments { get; set; } = new List<Comment>();
         [BsonElement("Likes")] public int Likes { get; set; } = 0;
         [BsonElement("Dislikes")] public int Dislikes { get; set; } = 0;
         [BsonElement("Public")]public bool isPublic { get; set; } = true;

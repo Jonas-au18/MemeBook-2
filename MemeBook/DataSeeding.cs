@@ -23,6 +23,7 @@ namespace MemeBook
             SeedCircle();
             SeedPosts();
             SeedLogins();
+            massLogout(); //Seeing server is reset we don't want users to be logged in.
         }
 
         public static void seedUsers()
@@ -35,49 +36,55 @@ namespace MemeBook
                 {
                     Fullname = "Hans Petersen",
                     Age = 42,
-                    PersonalCircle = new Circles()
+                    PersonalCircle = new Circles(),
+                    gender = 'M',
                 };
                 Users.Add(u);
                 u = new User()
                 {
                     Fullname = "Viggo bjerg af simba",
                     Age = 22,
-                    PersonalCircle = new Circles()
+                    PersonalCircle = new Circles(),
+                    gender = 'M'
                 };
                 Users.Add(u);
                 u = new User()
                 {
                     Fullname = "Jonas Nielsen",
                     Age = 31,
-                    PersonalCircle = new Circles()
+                    PersonalCircle = new Circles(),
+                    gender = 'M'
                 };
                 Users.Add(u);
                 u = new User()
                 {
                     Fullname = "Kappa the king",
                     Age = 9001,
-                    PersonalCircle = new Circles()
+                    PersonalCircle = new Circles(),
+                    gender = 'F'
                 };
                 Users.Add(u);
                 u = new User()
                 {
                     Fullname = "Martin Roland",
                     Age = 20,
-                    PersonalCircle = new Circles()
+                    PersonalCircle = new Circles(),
+                    gender = 'M'
                 };
                 Users.Add(u);
                 u = new User()
                 {
                     Fullname = "Jonas Hansen",
                     Age = 54,
-                    PersonalCircle = new Circles()
+                    PersonalCircle = new Circles(),
+                    gender = 'M'
                 };
                 Users.Add(u);
                 foreach (var i in Users)
                 {
                     _user.CreateUser(i);
-                    _circle.CreateCircle(i);
-                    var id = _circle.FindByUser(i);
+                    _circle.CreateCircle(i.User_ID,"");
+                    var id = _circle.FindByUser(i.User_ID);
                     i.PersonalCircle = id[0];
                     _user.UpdateUser(i);
                 }
@@ -145,38 +152,44 @@ namespace MemeBook
         {
             var myUsers = _user.Get();
             var m = _circle.Get();
-            if (m.Count == 0)
+            if (m.Count == myUsers.Count)
             {
                 var circles = new List<Circles>();
                 var c = new Circles()
                 {
-                    users = {myUsers[1], myUsers[3]},
+                    users = new List<string>(){myUsers[1].User_ID, myUsers[3].User_ID},
                     name = "Wow for beginners"
                 };
                 circles.Add(c);
                 c = new Circles()
                 {
-                    users = { myUsers[0], myUsers[1], myUsers[1] },
+                    users = new List<string>() { myUsers[5].User_ID, myUsers[1].User_ID, myUsers[2].User_ID },
                     name = "What you got!"
                 };
                 circles.Add(c);
                 c = new Circles()
                 {
-                    users = { myUsers[3]},
+                    users = new List<string>() { myUsers[3].User_ID},
                     name = "Cool place"
                 };
                 circles.Add(c);
                 c = new Circles()
                 {
-                    users = { myUsers[1], myUsers[2], myUsers[3], myUsers[4] },
+                    users = new List<string>() { myUsers[1].User_ID, myUsers[2].User_ID, myUsers[3].User_ID, myUsers[4].User_ID },
                     name = "Secret order"
                 };
                 circles.Add(c);
 
                 foreach (var i in circles)
                 {
-                    _circle.CreateCircle(myUsers[1]);
+                    var id = _circle.CreateCircle(myUsers[0].User_ID, i.name);
+                    var user = i.users;
+                    foreach (var j in user)
+                    {
+                        _circle.AddToCircle(j,id);
+                    }
                 }
+
             }
         }
 
@@ -191,21 +204,21 @@ namespace MemeBook
                 var p = new Post()
                 {
                     Owner_ID = myUsers[1].User_ID,
-                    Circle_ID = myCircles[0].Circle_ID,
+                    Circle_ID = myCircles[myUsers.Count].Circle_ID,
                     Content = "#kimjungundead"
                 };
                 myPost.Add(p);
                 p = new Post()
                 {
                     Owner_ID = myUsers[1].User_ID,
-                    Circle_ID = myCircles[0].Circle_ID,
+                    Circle_ID = myCircles[myUsers.Count].Circle_ID,
                     Content = "OH MY GOD!"
                 };
                 myPost.Add(p);
                 p = new Post()
                 {
                     Owner_ID = myUsers[1].User_ID,
-                    Circle_ID = myCircles[1].Circle_ID,
+                    Circle_ID = myCircles[myUsers.Count + 1].Circle_ID,
                     Content = "Son of a *****!"
                 };
                 myPost.Add(p);
@@ -213,14 +226,14 @@ namespace MemeBook
                 p = new Post()
                 {
                     Owner_ID = myUsers[2].User_ID,
-                    Circle_ID = myCircles[0].Circle_ID,
+                    Circle_ID = myCircles[myUsers.Count].Circle_ID,
                     Content = "Are we actually even real?"
                 };
                 myPost.Add(p);
                 p = new Post()
                 {
                     Owner_ID = myUsers[2].User_ID,
-                    Circle_ID = myCircles[1].Circle_ID,
+                    Circle_ID = myCircles[myUsers.Count + 1].Circle_ID,
                     Content = "Does this game never end?"
                 };
                 myPost.Add(p);
@@ -228,7 +241,7 @@ namespace MemeBook
                 p = new Post()
                 {
                     Owner_ID = myUsers[3].User_ID,
-                    Circle_ID = myCircles[2].Circle_ID,
+                    Circle_ID = myCircles[myUsers.Count + 3].Circle_ID,
                     Content = "Where are my friends?"
                 };
                 myPost.Add(p);
@@ -272,6 +285,16 @@ namespace MemeBook
                     _post.CreatePost(i.Owner_ID,i.Content,i.Circle_ID);
                 }
 
+            }
+        }
+
+        public static void massLogout()
+        {
+            var users = _user.Get();
+            foreach (var i in users)
+            {
+                i.Logged_in = false;
+                _user.UpdateUser(i);
             }
         }
     }

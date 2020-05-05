@@ -10,13 +10,6 @@ namespace MemeBook
 {
     class Program
     {
-        private static User _user;
-        private static string refId;
-        private static UserService _uService;
-        private static PostService _pService;
-        private static CircleService _cService;
-        private static LoginService _lService;
-        private static View _view;
         private static MemeBookController _control;
         static void Main(string[] args)
         {
@@ -37,24 +30,13 @@ namespace MemeBook
                 {
                     case 'w':
                     {
-                        var myPost = _view.Wall(_user.PersonalCircle);
-                        Console.WriteLine("\n");
-                        foreach (var i in myPost)
-                        {
-                            Console.WriteLine(i.Content + " " + i.date + " " + _uService.GetById(i.Owner_ID).Fullname);
-                        }
-                        Console.WriteLine("\n");
+                        _control.wall();
                         break;
                     }
                     case 'f':
                     {
-                        var myFeed = _view.Feed(_user);
-                        Console.WriteLine("\n");
-                        foreach (var i in myFeed)
-                        {
-                            Console.WriteLine(i.Content);   
-                        }
-                        Console.WriteLine("\n");
+                        _control.feed();
+                        
                         break;
                     }
                     case 'u':
@@ -65,6 +47,11 @@ namespace MemeBook
                     case 'l':
                     {
                         _control.Login();
+                        break;
+                    }
+                    case 'o':
+                    {
+                        _control.logout();
                         break;
                     }
                 }

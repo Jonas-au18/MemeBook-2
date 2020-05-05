@@ -33,7 +33,7 @@ namespace MemeBook.Controller
         public void DefaultInterface()
         {
             Console.WriteLine("|| u:Search user || g:Search group || w:View wall || f:View feed || l:Login ||"); //@ max len, new line after hits.
-            Console.WriteLine("|| e:Show friends|| h: Show groups ||");
+            Console.WriteLine("|| e:Show friends|| h: Show groups || o:Logout    ||");
             boxLine();
         }
 
@@ -53,9 +53,8 @@ namespace MemeBook.Controller
                 boxLine();
                 Console.WriteLine("Now logged in as: " + _uService.GetById(_user.User_ID).Fullname);
                 boxLine();
-                var user = _uService.GetById(refId);
-                user.Logged_in = true;
-                _uService.UpdateUser(user);
+                _user.Logged_in = true;
+                _uService.UpdateUser(_user);
             }
         }
 
@@ -85,8 +84,8 @@ namespace MemeBook.Controller
                             boxLine();
                             Console.WriteLine("Select friends number");
                             boxLine();
-                            var index = Console.ReadLine();
-                            _view.Wall(_uService.GetById(_user.Following[Convert.ToInt32(index)]).PersonalCircle);
+                            var index = Convert.ToInt32(Console.ReadLine()) - 1;
+                            _view.Wall(_uService.GetById(_user.Following[index]).PersonalCircle);
                             break;
                         }
                         case '2':
@@ -121,6 +120,48 @@ namespace MemeBook.Controller
             bool done = false;
             do
             {
+                boxLine();
+                Console.WriteLine("|| 1:Show wall || 2:Show User details || 3:Go back ||");
+                string key = Console.ReadLine();
+                if (string.IsNullOrEmpty(key)) continue;
+                switch (key[0])
+                {
+                    case '1':
+                    {   boxLine();
+                        Console.WriteLine("Enter the number of the person you wanna watch");
+                        int index = Convert.ToInt32(Console.ReadLine()) - 1;
+                        var view = _view.Wall(_uService.GetById(names[index]).PersonalCircle);
+                        Console.WriteLine("\n");
+                        foreach (var i in view)
+                        {
+                            boxLine();
+                            Console.WriteLine("Posted: " + i.date + " by: " + _uService.GetById(i.Owner_ID).Fullname);
+                            boxLine();
+                            Console.WriteLine(i.Content);
+                            boxLine();
+                            Console.WriteLine("\n");
+                        }
+                        break;
+                    }
+                    case '2':
+                    {
+                        boxLine();
+                        Console.WriteLine("Enter the number of the person you wanna watch");
+                        int index = Convert.ToInt32(Console.ReadLine()) - 1;
+                        var person = _uService.GetById(names[index]);
+                        boxLine();
+                        Console.WriteLine("Name: " +person.Fullname);
+                        Console.WriteLine("Age: " + person.Age);
+                        Console.WriteLine("Gender: " + person.gender);
+                        Console.WriteLine("Loggedin: " + person.Logged_in);
+                        break;
+                    }
+                    case '3':
+                    {
+                        done = true;
+                        break;
+                    }
+                }
 
             } while (!done);
         }
@@ -132,12 +173,52 @@ namespace MemeBook.Controller
 
         public void wall()
         {
-
+            if (_user != null)
+            {
+                if (_user.Logged_in)
+                {
+                    var myPost = _view.Wall(_user.PersonalCircle);
+                    Console.WriteLine("\n");
+                    foreach (var i in myPost)
+                    {
+                        boxLine();
+                        Console.WriteLine("Posted: " + i.date + " by: " + _uService.GetById(i.Owner_ID).Fullname);
+                        boxLine();
+                        Console.WriteLine(i.Content);
+                        boxLine();
+                        Console.WriteLine("\n");
+                    }
+                }
+            }
+            else
+            Console.WriteLine("Please login");
         }
 
         public void feed()
         {
+            if (_user != null && _user.Logged_in)
+            {
+                var myFeed = _view.Feed(_user);
+                Console.WriteLine("\n");
+                foreach (var i in myFeed)
+                {
+                    boxLine();
+                    Console.WriteLine("Posted: " + i.date + " by: " + _uService.GetById(i.Owner_ID).Fullname);
+                    boxLine();
+                    Console.WriteLine(i.Content);
+                    boxLine();
+                    Console.WriteLine("\n");
+                }
+            }
+            else
+                Console.WriteLine("Please login");
+   
+        }
 
+        public void logout()
+        {
+            _user.Logged_in = false;
+            _uService.UpdateUser(_user);
         }
     }
 }

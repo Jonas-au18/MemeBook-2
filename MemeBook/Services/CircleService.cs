@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using MemeBook.Models;
 using MongoDB.Driver;
@@ -22,7 +23,7 @@ namespace MemeBook.Services
             return _Circle.Find(m => true).ToList();
         }
 
-        public List<User> FindUsers(Circles circles)
+        public List<string> FindUsers(Circles circles)
         {
             var users = _Circle.Find(m => m.Circle_ID == circles.Circle_ID).FirstOrDefault();
             return users.users;
@@ -33,29 +34,27 @@ namespace MemeBook.Services
             return _Circle.Find(m => m.Circle_ID == id).FirstOrDefault();
         }
 
-        public List<Circles> FindByUser(User _user)
+        public List<Circles> FindByUser(string _user)
         {
+            var c = _Circle.Find(m => m.users.Contains(_user)).ToList();
             List<Circles> myCircles = new List<Circles>();
-            var C = Get();
-            foreach (var i in C)
+            foreach (var i in c)
             {
-                if (i.users.Find(x => x.User_ID == _user.User_ID) != null)
-                {
                     myCircles.Add(i);
-                }
             }
-
+            Console.WriteLine(myCircles.Count);
             return myCircles;
         }
 
-        public string CreateCircle(User user)
+        public string CreateCircle(string user,string name)
         {
-            Circles myCircles = new Circles
+            Circles myCircles = new Circles()
             {
-                users = new List<User>
+                users = new List<string>
                 {
                     user
-                }
+                },
+                name = name
             };
             _Circle.InsertOne(myCircles);
             var id = _Circle.Find(m => m.Circle_ID == myCircles.Circle_ID).FirstOrDefault();
@@ -67,14 +66,14 @@ namespace MemeBook.Services
             _Circle.DeleteOne(m => m.Circle_ID == id);
         }
 
-        public void AddToCircle(User user, string id)
+        public void AddToCircle(string user, string id)
         {
             var myCircle = _Circle.Find(m => m.Circle_ID == id).FirstOrDefault();
             myCircle.users.Add(user);
             _Circle.ReplaceOne(m => m.Circle_ID == id, myCircle);
         }
 
-        public void RemoveFromCircle(User user, string id)
+        public void RemoveFromCircle(string user, string id)
         {
             var myCircle = _Circle.Find(m => m.Circle_ID == id).FirstOrDefault();
             myCircle.users.Remove(user);

@@ -24,7 +24,7 @@ namespace MemeBook.Queries
         public List<Post> Feed(User user)
         {
             List<Post> myFeed = new List<Post>();
-            var myCircles = _Circles.FindByUser(user);
+            var myCircles = _Circles.FindByUser(user.User_ID);
 
             foreach (var i in myCircles)
             {
