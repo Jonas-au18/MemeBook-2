@@ -38,15 +38,11 @@ namespace MemeBook.Queries
             return myFeed;
         }
 
-        public List<Post> Wall(User user)
+        public List<Post> Wall(Circles personal)
         {
-            List<Post> myPosts = new List<Post>();
-            var ids = _users.GetPostById(user.User_ID);
-            foreach (var i in ids)
-            {
-                myPosts.Add(_posts.GetPostById(i));
-            }
-            return myPosts;
+            var ids = _posts.GetPostByCircle(personal);
+            
+            return ids;
         }
     }
 }

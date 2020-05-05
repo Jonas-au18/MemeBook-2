@@ -34,23 +34,18 @@ namespace MemeBook.Services
             return _users.Find(m => true).ToList();
         }
 
-        public List<string> GetPostById(string id)
-        {
-            var user = _users.Find(m => m.User_ID == id).FirstOrDefault();
-
-            List<string> ids = new List<string>();
-            ids = user.Post_ID;
-            return ids;
-        }
-
         public List<string> SearchByName(string name)
         {   
             List<string> names = new List<string>();
             var users = _users.Find(m => true).ToList();
             foreach (var i in users)
             {
-                
+                if (i.Fullname.Contains(name))
+                {
+                    names.Add(i.User_ID);
+                }
             }
+            return names;
         }
 
         public void CreateUser(User user)
@@ -61,11 +56,6 @@ namespace MemeBook.Services
         public void DeleteUser(string id)
         {
             _users.DeleteOne(m => m.User_ID == id);
-        }
-
-        public void KillAllUsers()
-        {
-            _users.DeleteMany(m => m.User_ID != null);
         }
 
         public void UpdateUser(User user)

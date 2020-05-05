@@ -81,10 +81,5 @@ namespace MemeBook.Services
             _Circle.ReplaceOne(m => m.Circle_ID == id, myCircle);
         }
 
-        public void KillAllCircles()
-        {
-            _Circle.DeleteMany(m => m.Circle_ID != null);
-        }
-
     }
 }

@@ -32,15 +32,22 @@ namespace MemeBook.Services
             return _posts.Find(m => m.Post_ID == id).FirstOrDefault();;
         }
 
+        public List<Post> GetPostByUserId(string id)
+        {
+            var Posts = _posts.Find(m => m.Owner_ID == id).ToList();
+            
+            return Posts;
+        }
+
         public List<Post> GetPostByCircle(Circles circles)
         {
-            return _posts.Find(m => m.Circles.Circle_ID == circles.Circle_ID).ToList();
+            return _posts.Find(m => m.Circle_ID == circles.Circle_ID).ToList();
         }
-        public void CreatePost(string id, string content, Circles circle)
+        public void CreatePost(string id, string content, string circle)
         {
             Post post = new Post
             {
-                Circles = circle,
+                Circle_ID = circle,
                 Content = content,
                 Owner_ID = id
             };
@@ -52,7 +59,12 @@ namespace MemeBook.Services
 
         public void DeletePost(string id)
         {
+            var post = _posts.Find(m => m.Post_ID == id).FirstOrDefault();
             _posts.DeleteOne(m => m.Post_ID == id);
+            var user = _user.GetById(post.Owner_ID);
+            user.Post_ID.Remove(id);
+            _user.UpdateUser(user);
+
         }
 
         public void CreateComment(Post post, string content, User user)
@@ -72,9 +84,5 @@ namespace MemeBook.Services
             _posts.ReplaceOne(post.Post_ID, post);
         }
 
-        public void KillAllPosts()
-        {
-            _posts.DeleteMany(m => m.Post_ID != null);
-        }
     }
 }
