@@ -24,7 +24,7 @@ namespace MemeBook.Queries
             _layout.boxLine();
             string content = Console.ReadLine();
             _layout.boxLine();
-            Console.WriteLine("Is the post public or private [Y/N]");
+            Console.WriteLine("Is the post public? [Y/N]");
             bool isPublic;
             if (Console.ReadLine() == "y")
             {
@@ -34,7 +34,7 @@ namespace MemeBook.Queries
             {
                 isPublic = false;
             }
-
+            Console.WriteLine(user);
             Post myPost = new Post()
             {
                 Owner_ID = user,

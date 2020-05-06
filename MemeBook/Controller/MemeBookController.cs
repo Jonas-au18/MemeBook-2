@@ -6,6 +6,7 @@ using MemeBook.Models;
 using MemeBook.Queries;
 using MemeBook.Services;
 using MongoDB.Bson;
+using MongoDB.Libmongocrypt;
 
 namespace MemeBook.Controller
 {

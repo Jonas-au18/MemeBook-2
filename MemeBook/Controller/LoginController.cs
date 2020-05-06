@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using MemeBook.Models;
 using MemeBook.Services;
 
@@ -37,6 +38,7 @@ namespace MemeBook.Controller
                     _layout.boxLine();
                     _user.Logged_in = true;
                     _uService.UpdateUser(_user);
+
                     return _user;
                 }
                 else
@@ -54,6 +56,7 @@ namespace MemeBook.Controller
         {
             _user.Logged_in = false;
             _uService.UpdateUser(_user);
+
             return null;
         }
     }

@@ -15,7 +15,7 @@ namespace MemeBook.Controller
         private CircleService _cService;
         private WallControl _wall;
         private UserController _uController;
-        private string _user;
+        private string _user = "";
 
 
         public SearchController(LayoutControl layout, UserService uServ, CircleService cServ,
@@ -54,6 +54,7 @@ namespace MemeBook.Controller
             {
                 case '1':
                 {
+                    Console.WriteLine(_user);
                     int index = _layout.Getindex("Enter the number of the person you wanna watch");
                     _wall.showWall(ids[index],_user);
                     break;
@@ -89,7 +90,6 @@ namespace MemeBook.Controller
         public void SearchGroup(string id)
         {
             _user = id;
-            Console.WriteLine(_user);
             _layout.boxLine();
             Console.WriteLine("Enter the group name you wanna search for");
             _layout.boxLine();

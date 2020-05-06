@@ -9,6 +9,7 @@ namespace MemeBook.Controller
 {
     public class WallControl
     {
+        private string myUser = null;
         private LayoutControl _layout;
         private UserService _uService;
         private CircleService _cService;
@@ -25,6 +26,8 @@ namespace MemeBook.Controller
         }
         public void showWall(string user, string guest)
         {
+            myUser = user;
+            Console.WriteLine(user);
             var owner = _uService.GetById(user);
             if (guest == null || !owner.Blocked.Contains(guest))
             {
@@ -55,7 +58,7 @@ namespace MemeBook.Controller
                 if(Int32.TryParse(input, out index))
                 {
                     var selected = post[index - 1];
-                    options(selected,user);
+                    options(selected,myUser);
                 }
                 else
                 {
@@ -79,8 +82,9 @@ namespace MemeBook.Controller
                     break;
                 }
                 case '2':
-                {
-                    _create.CreatePost(_cService.FindByID(post.Circle_ID),user);
+                {   Console.WriteLine(user);
+                    Console.WriteLine(myUser);
+                    _create.CreatePost(_cService.FindByID(post.Circle_ID),MemeBookController._user.User_ID);
                     break;
                 }
                 case '3':
