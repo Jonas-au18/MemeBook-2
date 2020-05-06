@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Xsl;
 using MemeBook.Models;
 using MemeBook.Services;
 using Microsoft.VisualBasic;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace MemeBook.Queries
 {
@@ -13,11 +15,11 @@ namespace MemeBook.Queries
         private CircleService _Circles;
         private UserService _users;
 
-        public View()
+        public View(PostService post, CircleService circle, UserService user)
         {
-            _posts = new PostService();
-            _Circles = new CircleService();
-            _users = new UserService();
+            _posts = post;
+            _Circles = circle;
+            _users = user;
 
         }
 
@@ -38,11 +40,30 @@ namespace MemeBook.Queries
             return myFeed;
         }
 
-        public List<Post> Wall(Circles personal)
+        public List<Post> Wall(Circles circle)
         {
-            var ids = _posts.GetPostByCircle(personal);
+            var ids = _posts.GetPostByCircle(circle);
             
             return ids;
         }
+
+        public List<Post> Wall(string user, string guest)
+        {
+            var owner = _users.GetById(user);
+            var posts = _posts.GetPostByUserId(owner.User_ID);
+            List<Post> toSend = new List<Post>();
+            foreach (var i in posts)
+            {
+                var circle = _Circles.FindByID(i.Circle_ID);
+                if (!circle.isPrivate || circle.users.Contains(guest))
+                {
+                    toSend.Add(i);
+                }
+            }
+                
+            return toSend;
+
+        }
+
     }
 }

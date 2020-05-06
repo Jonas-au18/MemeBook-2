@@ -17,7 +17,7 @@ namespace MemeBook
         {
             _circle = new CircleService();
             _user = new UserService();
-            _post = new PostService();
+            _post = new PostService(_user);
             _login = new LoginService();
             seedUsers();
             SeedCircle();
@@ -84,6 +84,7 @@ namespace MemeBook
                 {
                     _user.CreateUser(i);
                     _circle.CreateCircle(i.PersonalCircle);
+                    _circle.AddToCircle(i.User_ID,i.PersonalCircle.Circle_ID);
                     _user.UpdateUser(i);
                 }
             }

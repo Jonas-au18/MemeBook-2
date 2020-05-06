@@ -7,7 +7,7 @@ using MongoDB.Driver;
 
 namespace MemeBook.Services
 {
-    class UserService
+    public class UserService
     {
         private readonly IMongoCollection<User> _users;
 
@@ -63,16 +63,25 @@ namespace MemeBook.Services
             _users.ReplaceOne(m => m.User_ID == user.User_ID, user);
         }
 
-        public void followUser(User user, string toFollow)
+        public void followUser(string user, string toFollow)
         {
-            user.Following.Add(toFollow);
-            _users.ReplaceOne(m => m.User_ID == user.User_ID, user);
+            var _user = _users.Find(m => m.User_ID == user).FirstOrDefault();
+            _user.Following.Add(toFollow);
+            _users.ReplaceOne(m => m.User_ID == user, _user);
         }
 
-        public void blockUser(User user, string toBlock)
+        public void unfollowUser(string me, string toUnfollow)
         {
-            user.Blocked.Add(toBlock);
-            _users.ReplaceOne(m => m.User_ID == user.User_ID, user);
+            var _user = _users.Find(m => m.User_ID == me).FirstOrDefault();
+            _user.Following.Remove(toUnfollow);
+            _users.ReplaceOne(m => m.User_ID == me, _user);
+        }
+
+        public void blockUser(string user, string toBlock)
+        {
+            var _user = _users.Find(m => m.User_ID == user).FirstOrDefault();
+            _user.Blocked.Add(toBlock);
+            _users.ReplaceOne(m => m.User_ID == user, _user);
         }
     }
 }

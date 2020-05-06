@@ -12,13 +12,13 @@ namespace MemeBook.Services
         private readonly IMongoCollection<Post> _posts;
         private UserService _user;
 
-        public PostService()
+        public PostService(UserService user)
         {
             var client = new MongoClient("mongodb://localhost:27017");
             var database = client.GetDatabase("MemeBook");
 
             _posts = database.GetCollection<Post>("Posts");
-            _user = new UserService();
+            _user = user;
         }
 
         //Pure seeding purpose
