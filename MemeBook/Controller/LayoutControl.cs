@@ -15,7 +15,7 @@ namespace MemeBook.Controller
         {
             boxLine();
             Console.WriteLine(msg);
-            int index = Convert.ToInt32(Console.ReadLine()) - 1;
+            int index = Convert.ToInt32(Console.ReadLine());
             return index;
         }
     }

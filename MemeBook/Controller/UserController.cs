@@ -136,11 +136,12 @@ namespace MemeBook.Controller
         {
             var myFeed = _view.Feed(user);
             {
+                myFeed.Reverse();
                 _layout.boxLine();
-                for (int i = myFeed.Count - 1; i > 0; i--)
+                for (int i = 0; i < myFeed.Count; i++)
                 {
                     _layout.boxLine();
-                    Console.WriteLine("Posted: " + myFeed[i].date + " by: " + _uService.GetById(myFeed[i].Owner_ID).Fullname);
+                    Console.WriteLine("(" + i + ")Posted: " + myFeed[i].date + " by: " + _uService.GetById(myFeed[i].Owner_ID).Fullname);
                     _layout.boxLine();
                     Console.WriteLine(myFeed[i].Content);
                     _layout.boxLine();
