@@ -82,9 +82,8 @@ namespace MemeBook.Controller
                     break;
                 }
                 case '2':
-                {   Console.WriteLine(user);
-                    Console.WriteLine(myUser);
-                    _create.CreatePost(_cService.FindByID(post.Circle_ID),MemeBookController._user.User_ID);
+                {  
+                    _create.CreatePost(_cService.FindByID(post.Circle_ID),myUser);
                     break;
                 }
                 case '3':

@@ -40,7 +40,6 @@ namespace MemeBook.Controller
         public void showFollowing(string _user)
         {
             _id = _user;
-            Console.Write(_user);
             var owner = _uService.GetById(_user);
             for (int i = 0; i < owner.Following.Count; i++)
             {
@@ -85,7 +84,6 @@ namespace MemeBook.Controller
         public void showGroup(string _user)
         {
             _id = _user;
-            Console.WriteLine(_id);
             var groups = _cService.FindByUser(_user);
             for (int i = 0; i < groups.Count; i++)
             {
@@ -93,12 +91,7 @@ namespace MemeBook.Controller
                 Console.WriteLine(i + ")Name: " + groups[i].name + " Members: " + groups[i].users.Count + " Public: " + !groups[i].isPrivate);
                 _layout.boxLine();
             }
-           /* foreach (var i in groups)
-            {
-                _layout.boxLine();
-                Console.WriteLine("Name: " + i.name + " Members: " + i.users.Count + " Public: " + !i.isPrivate);
-                _layout.boxLine();
-            }*/
+
            grpSelector(groups);
         }
 

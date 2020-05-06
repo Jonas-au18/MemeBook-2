@@ -56,7 +56,6 @@ namespace MemeBook.Controller
         {
             _user.Logged_in = false;
             _uService.UpdateUser(_user);
-
             return null;
         }
     }

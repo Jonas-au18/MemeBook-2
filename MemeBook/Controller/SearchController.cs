@@ -54,7 +54,6 @@ namespace MemeBook.Controller
             {
                 case '1':
                 {
-                    Console.WriteLine(_user);
                     int index = _layout.Getindex("Enter the number of the person you wanna watch");
                     _wall.showWall(ids[index],_user);
                     break;
