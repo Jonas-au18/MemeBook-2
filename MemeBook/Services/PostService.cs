@@ -45,7 +45,6 @@ namespace MemeBook.Services
         }
         public void CreatePost(Post post)
         {
-            Console.WriteLine(post.Owner_ID);
             _posts.InsertOne(post);
             var user = _user.GetById(post.Owner_ID);
             user.Post_ID.Add(post.Post_ID);

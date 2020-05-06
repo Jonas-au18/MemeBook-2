@@ -34,6 +34,8 @@ namespace MemeBook.Queries
             {
                 isPublic = false;
             }
+
+            Console.WriteLine(user);
             Post myPost = new Post()
             {
                 Owner_ID = user,

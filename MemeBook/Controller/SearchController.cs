@@ -15,7 +15,7 @@ namespace MemeBook.Controller
         private CircleService _cService;
         private WallControl _wall;
         private UserController _uController;
-        private string _user = "";
+        private string _user;
 
 
         public SearchController(LayoutControl layout, UserService uServ, CircleService cServ,

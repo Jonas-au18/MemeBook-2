@@ -26,8 +26,7 @@ namespace MemeBook.Controller
         }
         public void showWall(string user, string guest)
         {
-            myUser = user;
-            Console.WriteLine(user);
+            myUser = guest;
             var owner = _uService.GetById(user);
             if (guest == null || !owner.Blocked.Contains(guest))
             {
@@ -57,6 +56,10 @@ namespace MemeBook.Controller
                 int index;
                 if(Int32.TryParse(input, out index))
                 {
+                    if (index < 0)
+                    {
+                        index = 0;
+                    }
                     var selected = post[index - 1];
                     options(selected,myUser);
                 }
@@ -82,13 +85,13 @@ namespace MemeBook.Controller
                     break;
                 }
                 case '2':
-                {  
+                { 
                     _create.CreatePost(_cService.FindByID(post.Circle_ID),myUser);
                     break;
                 }
                 case '3':
                 {
-                    _create.CreateComment(post,user);
+                    _create.CreateComment(post,myUser);
                     break;
                 }
             }
@@ -118,6 +121,7 @@ namespace MemeBook.Controller
 
         public void showCircleWall(string user,Circles circle)
         {
+            myUser = user;
             var posts = _view.Wall(circle);
             posts.Reverse();
             for (int i = 0; i < posts.Count; i++)

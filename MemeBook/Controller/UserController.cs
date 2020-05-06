@@ -125,6 +125,7 @@ namespace MemeBook.Controller
 
         public void feed(User user)
         {
+            _id = user.User_ID;
             var myFeed = _view.Feed(user);
             {
                 myFeed.Reverse();
