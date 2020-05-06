@@ -87,6 +87,15 @@ namespace MemeBook
                     _circle.AddToCircle(i.User_ID,i.PersonalCircle.Circle_ID);
                     _user.UpdateUser(i);
                 }
+
+                _user.followUser(Users[2].User_ID,Users[3].User_ID);
+                _user.followUser(Users[2].User_ID,Users[1].User_ID);
+                _user.followUser(Users[2].User_ID,Users[4].User_ID);
+                _user.followUser(Users[3].User_ID,Users[2].User_ID);
+                _user.followUser(Users[3].User_ID,Users[1].User_ID);
+                _user.followUser(Users[3].User_ID,Users[4].User_ID);
+                _user.followUser(Users[3].User_ID,Users[0].User_ID);
+                _user.followUser(Users[1].User_ID,Users[3].User_ID);
             }
 
         }
@@ -144,6 +153,7 @@ namespace MemeBook
                 {
                     _login.CreateUser(i.Username,i.Password,i.User_id);
                 }
+
             }
         }
 
@@ -214,7 +224,7 @@ namespace MemeBook
                 {
                     Owner_ID = myUsers[1].User_ID,
                     Circle_ID = myCircles[myUsers.Count].Circle_ID,
-                    Content = "OH MY GOD!"
+                    Content = "OH MY GOD!",
                 };
                 myPost.Add(p);
                 p = new Post()
@@ -287,8 +297,58 @@ namespace MemeBook
                     _post.CreatePost(i);
                 }
 
+                var comment = new List<Comment>();
+                var c = new Comment()
+                {
+                    Content = "This is just for testing",
+                    Owner_ID = myUsers[1].User_ID
+                };
+                comment.Add(c);
+                c = new Comment()
+                {
+                    Content = "Another test to seed some data",
+                    Owner_ID = myUsers[3].User_ID
+                };
+                comment.Add(c);
+                c = new Comment()
+                {
+                    Content = "Still testing",
+                    Owner_ID = myUsers[1].User_ID
+                };
+                comment.Add(c);
+                c = new Comment()
+                {
+                    Content = "Filler",
+                    Owner_ID = myUsers[2].User_ID
+                };
+                comment.Add(c);
+                c = new Comment()
+                {
+                    Content = "Random",
+                    Owner_ID = myUsers[2].User_ID
+                };
+                comment.Add(c);
+                c = new Comment()
+                {
+                    Content = "Best post ever!!",
+                    Owner_ID = myUsers[2].User_ID
+                };
+                comment.Add(c);
+                c = new Comment()
+                {
+                    Content = "So hyped",
+                    Owner_ID = myUsers[2].User_ID
+                };
+                comment.Add(c);
+
+                foreach (var i in comment)
+                {
+                    _post.CreateComment(myPost[2].Post_ID,i);
+                }
+
             }
         }
+
 
         public static void massLogout()
         {

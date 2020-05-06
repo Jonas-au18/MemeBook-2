@@ -36,9 +36,9 @@ namespace MemeBook.Controller
             _layout.boxLine();
             string name = Console.ReadLine();
             var names = _uService.SearchByName(name);
-            foreach (var i in names)
+            for (int i = 0; i < names.Count; i++)
             {
-                Console.WriteLine(_uService.GetById(i).Fullname);   
+                Console.WriteLine("(" + i + ")" + _uService.GetById(names[i]).Fullname);
             }
             selectUser(names);
         }
@@ -95,12 +95,12 @@ namespace MemeBook.Controller
             _layout.boxLine();
             string name = Console.ReadLine();
             var names = _cService.SearchByName(name);
-            foreach (var i in names)
+            for (int i = 0; i < names.Count; i++)
             {
-                if (!i.isPrivate ||i.AllowedUser.Contains(_user))
+                if (!names[i].isPrivate ||names[i].AllowedUser.Contains(_user))
                 {
                     _layout.boxLine();
-                    Console.WriteLine("Name: " + i.name + " Members: " + i.users.Count);
+                    Console.WriteLine("(" + i + ")Name: " + names[i].name + " Members: " + names[i].users.Count);
                     _layout.boxLine();
                 }
                 else
@@ -109,8 +109,8 @@ namespace MemeBook.Controller
                     Console.WriteLine("No such group exist");
                     _layout.boxLine();
                 }
-                selectGroup(names);
             }
+            selectGroup(names);
         }
 
         public void selectGroup(List<Circles> circles)

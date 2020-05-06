@@ -18,7 +18,7 @@ namespace MemeBook.Models
         [BsonElement("Gender")] public char gender { get; set; } = ' ';
         [BsonElement("Post_ID")] public List<string> Post_ID { get; set; } = new List<string>();
         [BsonElement("Logged_in")] public bool Logged_in { get; set; } = false;
-        [BsonElement("Blocked")]public List<string> Blocked { get; set; }
+        [BsonElement("Blocked")]public List<string> Blocked { get; set; } = new List<string>();
         [BsonElement("Circle")]public Circles PersonalCircle { get; set; }
         [BsonElement("Followed")]public List<string> Following { get; set;} = new List<string>();
     }

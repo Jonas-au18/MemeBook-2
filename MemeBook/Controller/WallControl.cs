@@ -29,11 +29,14 @@ namespace MemeBook.Controller
             if (guest == null || !owner.Blocked.Contains(guest))
             {
                 var post = _view.Wall(user,guest);
-                foreach (var i in post)
+                post.Reverse();
+                for (int i = 0; i < post.Count; i++)
                 {
                     _layout.boxLine();
-                    Console.WriteLine("Date: " + i.date + " By: " + _uService.GetById(i.Owner_ID).Fullname);
-                    Console.WriteLine(i.Content);
+                    Console.WriteLine("Post nr: " + (i + 1));
+                    Console.WriteLine("Date: " + post[i].date + " By: " + _uService.GetById(post[i].Owner_ID).Fullname);
+                    Console.WriteLine(post[i].Content);
+                    Console.WriteLine("Nr. of comments:" + post[i].Comments.Count);
                     _layout.boxLine();
                 }
                 select(post,guest);
@@ -51,7 +54,7 @@ namespace MemeBook.Controller
                 int index;
                 if(Int32.TryParse(input, out index))
                 {
-                    var selected = post[post.Count - index - 1];
+                    var selected = post[index - 1];
                     options(selected,user);
                 }
                 else
@@ -66,7 +69,7 @@ namespace MemeBook.Controller
         public void options(Post post, string user)
         {
             _layout.boxLine();
-            Console.WriteLine("|| 1:Show comments || 2: create post || 3:Upload image || 4:Post comment ||");
+            Console.WriteLine("|| 1:Show comments || 2: create post || 3:Post comment ||");
             string key = Console.ReadLine();
             switch (key[0])
             {
@@ -82,10 +85,6 @@ namespace MemeBook.Controller
                 }
                 case '3':
                 {
-                    break;
-                }
-                case '4':
-                {
                     _create.CreateComment(post,user);
                     break;
                 }
@@ -96,6 +95,7 @@ namespace MemeBook.Controller
         {
             if (post.Comments != null)
             {
+                post.Comments.Reverse();
                 foreach (var i in post.Comments)
                 {
                     _layout.boxLine();
@@ -116,14 +116,17 @@ namespace MemeBook.Controller
         public void showCircleWall(string user,Circles circle)
         {
             var posts = _view.Wall(circle);
-                foreach (var i in posts)
-                {
-                    _layout.boxLine();
-                    Console.WriteLine("Date: " + i.date + " By: " + _uService.GetById(i.Owner_ID).Fullname);
-                    Console.WriteLine(i.Content);
-                    _layout.boxLine();
-                }
-                select(posts,user);
+            posts.Reverse();
+            for (int i = 0; i < posts.Count; i++)
+            {
+                _layout.boxLine();
+                Console.WriteLine("Post nr: " + (i + 1));
+                Console.WriteLine("Date: " + posts[i].date + " By: " + _uService.GetById(posts[i].Owner_ID).Fullname);
+                Console.WriteLine(posts[i].Content);
+                Console.WriteLine("Nr. of comments:" + posts[i].Comments.Count);
+                _layout.boxLine();
+            }
+            select(posts,user);
         }
 
     }

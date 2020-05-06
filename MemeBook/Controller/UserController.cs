@@ -40,14 +40,20 @@ namespace MemeBook.Controller
         public void showFollowing(string _user)
         {
             var owner = _uService.GetById(_user);
-            foreach (var i in owner.Following)
+            for (int i = 0; i < owner.Following.Count; i++)
+            {
+                var following = _uService.GetById(owner.Following[i]).Fullname;
+                _layout.boxLine();
+                Console.WriteLine(i + " " + following);
+            }
+           /* foreach (var i in owner.Following)
             {
                 var following = _uService.GetById(i).Fullname;
                 _layout.boxLine();
                 Console.WriteLine(following);
-            }
+            }*/
             _layout.boxLine();
-
+            selector(owner.Following);
         }
 
         public void selector(List<string> ids)
@@ -83,12 +89,19 @@ namespace MemeBook.Controller
         public void showGroup(string _user)
         {
             var groups = _cService.FindByUser(_user);
-            foreach (var i in groups)
+            for (int i = 0; i < groups.Count; i++)
+            {
+                _layout.boxLine();
+                Console.WriteLine(i + ")Name: " + groups[i].name + " Members: " + groups[i].users.Count + " Public: " + !groups[i].isPrivate);
+                _layout.boxLine();
+            }
+           /* foreach (var i in groups)
             {
                 _layout.boxLine();
                 Console.WriteLine("Name: " + i.name + " Members: " + i.users.Count + " Public: " + !i.isPrivate);
                 _layout.boxLine();
-            }
+            }*/
+           grpSelector(groups);
         }
 
         public void grpSelector(List<Circles> circles)
@@ -134,6 +147,7 @@ namespace MemeBook.Controller
 
                 }
             }
+            _wall.select(myFeed,user.User_ID);
         }
 
     }
